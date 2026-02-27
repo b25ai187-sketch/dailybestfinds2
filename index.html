@@ -4,128 +4,140 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DailyBestFinds21 | Best Deals Online</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
 <style>
-    body {
-        margin:0; font-family: 'Roboto', sans-serif; background:#f2f2f2;
-    }
-    header {
-        background:#111; color:white; padding:20px; text-align:center; font-size:28px; font-weight:bold; letter-spacing:1px; position:sticky; top:0; z-index:10;
-    }
-    nav {
-        background:#222; display:flex; justify-content:center; flex-wrap:wrap;
-    }
-    nav a {
-        color:white; margin:10px 15px; text-decoration:none; font-weight:500; transition:color 0.3s;
-    }
-    nav a:hover { color:#ff4d4d; }
-    .container { max-width:1200px; margin:20px auto; padding:0 10px; }
-    h2 { margin-top:40px; border-left:5px solid #ff4d4d; padding-left:10px; font-size:22px; color:#333; }
-    .products { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:20px; margin-top:20px; }
-    .card {
-        background:white; border-radius:10px; padding:15px; box-shadow:0 6px 12px rgba(0,0,0,0.1);
-        transition: transform 0.3s, box-shadow 0.3s; position:relative; text-align:center;
-    }
-    .card:hover { transform:translateY(-5px); box-shadow:0 12px 20px rgba(0,0,0,0.2); }
-    .card img { width:100%; height:180px; object-fit:cover; border-radius:8px; }
-    .card h3 { font-size:16px; margin:10px 0 5px; color:#111; }
-    .price { color:green; font-weight:bold; margin-bottom:8px; }
-    .btn {
-        display:inline-block; padding:10px 15px; background:#ff4d4d; color:white; text-decoration:none;
-        border-radius:6px; font-weight:bold; transition:0.3s;
-    }
-    .btn:hover { background:#e60000; }
-    .badge {
-        position:absolute; top:10px; left:10px; background:gold; color:black; padding:3px 7px;
-        border-radius:5px; font-size:12px;
-    }
-    .old { background:#aaa !important; color:white !important; }
-    footer { background:#111; color:white; text-align:center; padding:20px; margin-top:40px; font-size:13px; }
-    @media(max-width:600px){ header{ font-size:22px; } }
+body {
+  margin:0; font-family:'Roboto',sans-serif; background:#f2f2f2;
+}
+header {
+  background:#111; color:white; padding:20px; text-align:center;
+  font-size:28px; font-weight:bold; position:sticky; top:0; z-index:10;
+}
+nav {
+  background:#222; display:flex; justify-content:center; flex-wrap:wrap;
+}
+nav a {
+  color:white; margin:10px 15px; text-decoration:none;
+}
+.container { max-width:1200px; margin:20px auto; padding:0 10px; }
+
+.search-box{
+  max-width:500px; margin:20px auto; position:relative;
+}
+.search-box input{
+  width:100%; padding:12px; font-size:16px;
+  border-radius:6px; border:1px solid #ccc;
+}
+.suggestions{
+  position:absolute; width:100%; background:white;
+  border-radius:6px; box-shadow:0 6px 12px rgba(0,0,0,0.2);
+  display:none; max-height:250px; overflow:auto; z-index:20;
+}
+.suggestions div{
+  padding:10px; cursor:pointer;
+}
+.suggestions div:hover{ background:#f0f0f0; }
+
+h2 { margin-top:40px; border-left:5px solid #ff4d4d; padding-left:10px; }
+.products { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:20px; margin-top:20px; }
+.card {
+  background:white; border-radius:10px; padding:15px; text-align:center;
+  box-shadow:0 6px 12px rgba(0,0,0,0.1); position:relative;
+}
+.card img { width:100%; height:180px; object-fit:cover; border-radius:8px; }
+.card h3 { font-size:16px; }
+.price { color:green; font-weight:bold; }
+.btn {
+  display:inline-block; padding:10px 15px; background:#ff4d4d;
+  color:white; border-radius:6px; text-decoration:none;
+}
+.badge {
+  position:absolute; top:10px; left:10px; background:gold;
+  padding:3px 7px; border-radius:5px; font-size:12px;
+}
+.old{ background:#aaa; color:white; }
+
+footer{
+  background:#111; color:white; text-align:center;
+  padding:20px; margin-top:40px; font-size:13px;
+}
 </style>
 </head>
+
 <body>
 
 <header>DailyBestFinds21</header>
+
 <nav>
-    <a href="#fashion">Fashion</a>
-    <a href="#electronics">Electronics</a>
-    <a href="#home">Home Products</a>
+  <a href="#">Fashion</a>
+  <a href="#">Electronics</a>
+  <a href="#">Home</a>
+  <a href="#">Books</a>
 </nav>
+
+<div class="search-box">
+  <input type="text" id="searchInput" placeholder="Search products...">
+  <div class="suggestions" id="suggestions"></div>
+</div>
 
 <div class="container" id="productContainer"></div>
 
 <footer>
-    © 2026 DailyBestFinds21 | Affiliate Disclosure: We may earn commission from qualifying purchases.
+© 2026 DailyBestFinds21 | Affiliate Disclosure
 </footer>
 
 <script>
 const products = [
-    // Fashion
-    { category:'fashion', name:'Stylish slippers', price:'₹999', img:'https://m.media-amazon.com/images/I/51nqf-tekAL._SY675_.jpg', status:'active', link:'https://amzn.in/d/0iO0GF3I' },
-    { category:'fashion', name:'Casual Jacket', price:'₹1499', img:'https://m.media-amazon.com/images/I/71MKN4OUfcL._SY575_.jpg', status:'active', link:'https://amzn.in/d/0hBTEgji' },
-    {category:'fashion', name:'Stylish snaeakers', price:'₹1999', img:'https://via.placeholder.com/250', status:'active', link:'YOUR_AFFILIATE_LINK_1' },
-
-    // Electronics
-    { category:'electronics', name:'Wireless Earbuds', price:'₹799', img:'https://via.placeholder.com/250', status:'active', link:'YOUR_AFFILIATE_LINK_3' },
-    { category:'electronics', name:'Smart Watch', price:'₹1299', img:'https://via.placeholder.com/250', status:'old', link:'YOUR_AFFILIATE_LINK_4' },
-
-    // Home Products
-    { category:'home', name:'LED Night Lamp', price:'₹499', img:'https://via.placeholder.com/250', status:'active', link:'YOUR_AFFILIATE_LINK_5' },
-    { category:'home', name:'Kitchen Organizer', price:'₹699', img:'https://via.placeholder.com/250', status:'old', link:'YOUR_AFFILIATE_LINK_6' },
-    // BOOKS
-    {category:'BOOKS', name:'Atomic Habits: The life-changing million copy bestseller', price:'₹491', img:'https://m.media-amazon.com/images/I/817HaeblezL._SL1500_.jpg', status:'active', link:'https://amzn.in/d/0fm5nW8s' },
-    {category:'BOOKS', name:'The Psychology of Money ', price:'₹285', img:'https://m.media-amazon.com/images/I/71XEsXS5RlL._SY425_.jpg', status:'active', link:'https://amzn.in/d/0eq221sq' },
+ {category:'fashion', name:'Stylish slippers', price:'₹999', img:'https://m.media-amazon.com/images/I/51nqf-tekAL._SY675_.jpg', status:'active', link:'https://amzn.in/d/0iO0GF3I'},
+ {category:'fashion', name:'Casual Jacket', price:'₹1499', img:'https://m.media-amazon.com/images/I/71MKN4OUfcL._SY575_.jpg', status:'active', link:'https://amzn.in/d/0hBTEgji'},
+ {category:'electronics', name:'Wireless Earbuds', price:'₹799', img:'https://via.placeholder.com/250', status:'active', link:'#'},
+ {category:'home', name:'LED Night Lamp', price:'₹499', img:'https://via.placeholder.com/250', status:'active', link:'#'},
+ {category:'BOOKS', name:'Atomic Habits', price:'₹491', img:'https://m.media-amazon.com/images/I/817HaeblezL._SL1500_.jpg', status:'active', link:'https://amzn.in/d/0fm5nW8s'},
+ {category:'BOOKS', name:'The Psychology of Money', price:'₹285', img:'https://m.media-amazon.com/images/I/71XEsXS5RlL._SY425_.jpg', status:'active', link:'https://amzn.in/d/0eq221sq'}
 ];
 
-// Render products dynamically
-const container = document.getElementById('productContainer');
-const categories = ['fashion','electronics','home','BOOKS'];
+const container=document.getElementById('productContainer');
 
-categories.forEach(cat=>{
-    const section = document.createElement('div');
-    const h2 = document.createElement('h2');
-    if(cat==='fashion') h2.innerText='👗 Trending Fashion';
-    if(cat==='electronics') h2.innerText='📱 Electronics & Gadgets';
-    if(cat==='home') h2.innerText='🏠 Home Essentials';
-    if(cat==='BOOKS') h2.innerText='📙 study and BOOKS';
-    section.appendChild(h2);
+function render(list){
+  container.innerHTML='';
+  if(list.length===0){
+    container.innerHTML='<h2>No exact match found. Similar items shown below 👇</h2>';
+    list=products.slice(0,4);
+  }
+  const grid=document.createElement('div');
+  grid.className='products';
+  list.forEach(p=>{
+    const c=document.createElement('div'); c.className='card';
+    const b=document.createElement('span'); b.className='badge'; b.innerText=p.status==='active'?'Hot Deal':'Old Deal';
+    c.appendChild(b);
+    c.innerHTML+=`<img src="${p.img}"><h3>${p.name}</h3><p class="price">${p.price}</p>
+    <a class="btn" href="${p.link}" target="_blank">Buy Now</a>`;
+    grid.appendChild(c);
+  });
+  container.appendChild(grid);
+}
+render(products);
 
-    const grid = document.createElement('div');
-    grid.className='products';
+const searchInput=document.getElementById('searchInput');
+const suggestions=document.getElementById('suggestions');
 
-    products.filter(p=>p.category===cat).forEach(p=>{
-        const card=document.createElement('div');
-        card.className='card';
-        // Badge
-        if(p.status==='active'){
-            const badge=document.createElement('span');
-            badge.className='badge';
-            badge.innerText='Hot Deal';
-            card.appendChild(badge);
-        } else {
-           const badge=document.createElement('span');
-            badge.className='badge old';
-            badge.innerText='Old Deal';
-            card.appendChild(badge);
-        }
-        // Image
-        const img=document.createElement('img');
-        img.src=p.img; card.appendChild(img);
-        // Name
-        const name=document.createElement('h3'); name.innerText=p.name; card.appendChild(name);
-        // Price
-        const price=document.createElement('p'); price.className='price'; price.innerText=p.price; card.appendChild(price);
-        // Button
-        const btn=document.createElement('a'); btn.className='btn'; btn.href=p.link; btn.target='_blank'; btn.innerText='Buy Now'; card.appendChild(btn);
-
-        grid.appendChild(card);
-    });
-
-    section.appendChild(grid);
-    container.appendChild(section);
+searchInput.addEventListener('input',()=>{
+  const val=searchInput.value.toLowerCase();
+  suggestions.innerHTML='';
+  if(!val){ suggestions.style.display='none'; render(products); return;}
+  const matches=products.filter(p=>p.name.toLowerCase().includes(val) || p.category.toLowerCase().includes(val));
+  matches.forEach(m=>{
+    const d=document.createElement('div');
+    d.innerText=m.name;
+    d.onclick=()=>{ searchInput.value=m.name; suggestions.style.display='none'; render([m]); };
+    suggestions.appendChild(d);
+  });
+  suggestions.style.display=matches.length?'block':'none';
+  render(matches);
 });
 </script>
 
 </body>
-</html> 
+</html>
